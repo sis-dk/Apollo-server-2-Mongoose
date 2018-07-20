@@ -25,6 +25,18 @@ schemaComposer.Query.addFields({
   expCount: ExperimentTC.getResolver('count'),
   expConnection: ExperimentTC.getResolver('connection'),
   expPagination: ExperimentTC.getResolver('pagination'),
+  enabledExps: {
+    type: '[Experiment]',
+    resolve: () => new Promise((resolve, reject) => {
+      Experiment.find({isEnabled: true}, (error, docs) => {
+        if(error) {
+          reject(error);
+        } else {
+          resolve(docs);
+        }
+      });
+    })
+  },
 });
 
 schemaComposer.Mutation.addFields({
